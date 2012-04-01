@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/home.xhtml">
+        <ui:define name="agendamento">
+            <p:panel header="Agendamento de Pacientes" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+
+                <h:form prependId="false" id="menulateral">
+                    <p:menubar>
+                        <p:menuitem value="Novo Agendamento " actionListener="#{agendamentoC.prepararAdicionarAgendamento}" update=":form:infosAgendamento" oncomplete="dialogGerAgendamento.show()"  icon="ui-icon-document"/>                       
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar>  
+                </h:form>
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="agend" value="#{agendamentoC.listarAgendamentos}">
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Especialidade"/>
+                            </f:facet>
+                            <h:outputText value="#{agend.idEspecialidade.especialidade}" />
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome do Médico"/>
+                            </f:facet>
+                            <h:outputText value="#{agend.idMedico.nome}" />
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome do Paciente"/>
+                            </f:facet>
+                            <h:outputText value="#{agend.idPaciente.nome}" />
+                        </p:column>
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="CPF do Paciente"/>
+                            </f:facet>
+                            <h:outputText value="#{agend.idPaciente.cpf}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Data da Consulta"/>
+                            </f:facet>
+                            <h:outputText value="#{agend.dataAgendamento}" id="popupDate">  
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>  
+                            </h:outputText> 
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Hora da Consulta"/>
+                            </f:facet>
+                            <h:outputText value="#{agend.horaAtendimento}" />
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Alterar"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{agendamentoC.prepararAlterarAgendamento}" icon="ui-icon-arrowrefresh-1-w" update=":form:infosAgendamento" oncomplete="dialogGerAgendamento.show()"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{agendamentoC.excluirAgendamento}" icon="ui-icon-close" ajax="true" onclick="confirmation.show()" />
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+
+                <p:dialog header="Gerencia Agendamento do Paciente" widgetVar="dialogGerAgendamento"  resizable="false" showEffect="slide" width="500">
+                    <h:form prependId="false" id="form">
+                        <p:menubar>
+                            <p:menuitem value="Salvar" update=":form1:tabela" oncomplete="dialogGerAgendamento.hide();" actionListener="#{agendamentoC.adicionarAgendamento}" icon="ui-icon-disk" />
+                            <p:menuitem value="Alterar" update=":form1:tabela" oncomplete="dialogGerAgendamento.hide();" actionListener="#{agendamentoC.alterarAgendamento}" icon="ui-icon-arrowrefresh-1-w"/>                    
+                        </p:menubar> 
+                        <h:panelGrid id="infosAgendamento" columns="2" style="margin-bottom:10px">
+                            <h:outputLabel value="Especialidade:" />
+                            <h:selectOneMenu id="esp" value="#{agendamentoC.especialidade.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione a Especialidade" itemValue="Nenhum" />
+                                <f:selectItems value="#{agendamentoC.especialidadesCmbBox}"  />
+                                <p:ajax update="med" listener="#{agendamentoC.getMedicosEspecialidadesCmbBox}"/>
+                            </h:selectOneMenu>  
+                            <h:outputLabel value="Médico:" />
+                            <h:selectOneMenu id="med" value="#{agendamentoC.medico.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o Médico" itemValue="Nenhum" />
+                                <f:selectItems value="#{agendamentoC.medicosEspecialidadesCmbBox}" />
+                            </h:selectOneMenu>
+
+                            <h:outputLabel value="Paciente" />
+                            <h:selectOneMenu id="pac" value="#{agendamentoC.paciente.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o Paciente" itemValue="Nenhum" />
+                                <f:selectItems value="#{agendamentoC.pacientesCmbBox}" />                                
+                            </h:selectOneMenu> 
+                            <h:outputLabel value="Data da consulta" />
+                            <p:calendar value="#{agendamentoC.agendamento.dataAgendamento}" id="popupCal" style="width: 200px;" /> 
+                            <h:outputLabel for="horaConsulta" value="Hora Consulta" />
+                            <h:inputText id="descConvenio" value="#{agendamentoC.agendamento.horaAtendimento}"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </p:panel>
+        </ui:define>
+    </ui:composition>     
+</html>
+

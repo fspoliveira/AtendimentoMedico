@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/home.xhtml">
+        <ui:define name="convenio">
+            <p:panel header="Faturamento por Convênio e Médico" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+                 <h:form prependId="false" id="menulateral">
+                    <p:menubar>                        
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar> 
+                </h:form>
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="faturamento" value="#{faturamentoC.listarFaturamentos}">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Descrição do Convênio"/>
+                            </f:facet>
+                            <h:outputText value="#{faturamento.descricaoConvenio}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Médico"/>
+                            </f:facet>
+                            <h:outputText value="#{faturamento.nomeMedico}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Valor Tratamento"/>
+                            </f:facet>
+                            <h:outputText value="#{faturamento.valorTratamento}" >
+                                 <f:convertNumber type="currency" currencySymbol='R$'/> 
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Total Materiais/Medicamentos"/>
+                            </f:facet>
+                            <h:outputText value="#{faturamento.precoTotalMateriais}" >
+                             <f:convertNumber type="currency" currencySymbol='R$'/> 
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+            </p:panel>
+        </ui:define>
+    </ui:composition>  
+</html>

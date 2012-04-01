@@ -1,0 +1,31 @@
+================================================================
+Descrição geral do Projeto
+================================================================
+
+O Sistema de Atendimento Médico, foi desenvolvido usando as seguintes tecnologias:
+
+Persistẽncia:Hibernate versão 4.0.1 com Annotations
+Banco de dados: My SQL Server version: 5.1.61-0ubuntu0.10.10.1 (Ubuntu)
+Script Banco de dados: script.sql
+
+Interface:Primefaces versão 3.1.1 e JSF (Java Server Faces versão 2.1)
+Tema: hot-sneaks-1.0.3
+
+Servidor Web: Apache Tomcat 7.0.1.4.0
+
+Sistema Operacional: Ubuntu Linux versão 10.10 kernel 2.6.35-30-generic-pae
+
+IDE: NetBeans versão 7.0.1
+
+Arquitetura: MVC (Model, View, Controller)
+
+Todas bibliotecas estão listadas no arquivo bibliotecas.png
+
+================================================================
+Usuário para login
+================================================================
+
+Usuário: fspo
+senha:   fspo
+
+Observacao, eu usei criptografia para armazenar a senha do usuario

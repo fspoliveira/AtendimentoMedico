@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/home.xhtml">
+        <ui:define name="convenio">
+            <p:panel header="Cadastro de Produtos" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+                <h:form prependId="false" id="menulateral">
+                    <p:menubar>
+                        <p:menuitem value="Novo Produto" actionListener="#{produtoC.prepararAdicionarProduto}" update=":form:infosProduto" oncomplete="dialogGerProduto.show()"  icon="ui-icon-document"/>                     
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar>                    
+                </h:form>  
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="produto" value="#{produtoC.listarProdutos}">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome do Produto"/>
+                            </f:facet>
+                            <h:outputText value="#{produto.descricao}" />
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tipo de Produto"/>
+                            </f:facet>
+                            <h:outputText value="#{produto.tipoProduto.descricao}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Preço"/>
+                            </f:facet>
+                            <h:outputText value="#{produto.precoUnitario}" >
+                                 <f:convertNumber type="currency" currencySymbol='R$'/> 
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Alterar"/>
+                            </f:facet>                            
+                            <p:commandButton actionListener="#{produtoC.prepararAlterarProduto}" icon="ui-icon-arrowrefresh-1-w" update=":form:infosProduto" oncomplete="dialogGerProduto.show()" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>   
+                            <p:commandButton actionListener="#{produtoC.excluirProduto}" icon="ui-icon-close" ajax="true" onclick="confirmation.show()" />
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+
+
+                <p:dialog header="Gerencia Produto" widgetVar="dialogGerProduto"  resizable="false" showEffect="slide" width="500">
+                    <h:form prependId="false" id="form">
+                        <p:menubar>
+                            <p:menuitem  value="Salvar" update=":form1:tabela" oncomplete="dialogGerProduto.hide();" actionListener="#{produtoC.adicionarProduto}" icon="ui-icon-disk" />
+                            <p:menuitem value="Alterar" update=":form1:tabela" oncomplete="dialogGerProduto.hide();" actionListener="#{produtoC.alterarProduto}" icon="ui-icon-arrowrefresh-1-w"/>                    
+                        </p:menubar>  
+                        <h:panelGrid id="infosProduto" columns="2" style="margin-bottom:10px">
+
+                            <h:outputLabel for="nomeProduto" value="Descrição do Produto" />
+                            <h:inputText id="nomeProduto" value="#{produtoC.produto.descricao}"/>
+                            <h:outputLabel value="Tipo:" />
+                            <h:selectOneMenu id="tipoProd" value="#{produtoC.tp.idTipoProduto}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o tipo de Produto" itemValue="Nenhum" />
+                                <f:selectItems value="#{produtoC.tipos}" />
+                            </h:selectOneMenu>
+                            <h:outputLabel for="valorProduto" value="Valor" />
+                            <h:inputText id="valorProduto" value="#{produtoC.produto.precoUnitario}"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </p:panel>
+        </ui:define>
+    </ui:composition>    
+</html>

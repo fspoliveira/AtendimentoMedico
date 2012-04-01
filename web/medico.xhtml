@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/home.xhtml">
+        <ui:define name="medico">
+
+            <p:panel header="Cadastro de Médicos" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+                <h:form prependId="false" id="menulateral">
+                    <p:menubar>
+                        <p:menuitem value="Novo Médico" actionListener="#{medicoC.prepararAdicionarMedico}" update=":form:infosMedico" oncomplete="dialogGerMedico.show()"  icon="ui-icon-document"/>                       
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar>                    
+                </h:form>
+
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="medico" value="#{medicoC.listarMedicos}">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome do Médico"/>
+                            </f:facet>
+                            <h:outputText value="#{medico.nome}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="CRM do Médico"/>
+                            </f:facet>
+                            <h:outputText value="#{medico.crm}" />
+                        </p:column>
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Usuário"/>
+                            </f:facet>
+                            <h:outputText value="#{medico.usuario.login}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Alterar"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{medicoC.prepararAlterarMedico}" icon="ui-icon-arrowrefresh-1-w"  update=":form:infosMedico" oncomplete="dialogGerMedico.show()"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{medicoC.excluirMedico}" icon="ui-icon-close" ajax="true" onclick="confirmation.show()" />
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+
+                <p:dialog header="Gerencia Médicos" widgetVar="dialogGerMedico"  resizable="false" modal="false" showEffect="slide" width="500">
+                    <h:form prependId="false" id="form">
+                        <p:menubar>
+                            <p:menuitem value="Salvar" update=":form1:tabela" oncomplete="dialogGerMedico.hide();" actionListener="#{medicoC.adicionarMedico}" icon="ui-icon-disk" />
+                            <p:menuitem value="Alterar" update=":form1:tabela" oncomplete="dialogGerMedico.hide();" actionListener="#{medicoC.alterarMedico}" icon="ui-icon-arrowrefresh-1-w"/>                    
+                        </p:menubar>   
+                        <h:panelGrid id="infosMedico" columns="2" style="margin-bottom:10px">
+                            <h:outputLabel for="descMedico" value="Nome Médico:" />
+                            <h:inputText id="nomeMedico" required="true" value="#{medicoC.medico.nome}">
+                                <f:validateLength minimum="2" /> 
+                            </h:inputText>
+                            <h:outputLabel for="crmMedico" value="CRM" />
+                            <h:inputText id="crmMedico" value="#{medicoC.medico.crm}"/>
+                            <h:outputLabel value="Id Usuário:" />
+                            <h:selectOneMenu id="user" value="#{medicoC.usuario.login}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o id do Usuário" itemValue="Nenhum" />
+                                <f:selectItems value="#{medicoC.usuariosCmbBox}" />
+                            </h:selectOneMenu> 
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </p:panel>
+        </ui:define>
+    </ui:composition>  
+</html>
