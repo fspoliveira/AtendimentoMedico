@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/home.xhtml">
+        <ui:define name="usuario">
+            <p:panel header="Cadastro de Usuário" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+                <h:form prependId="false" id="menulateral">
+                    <p:menubar>
+                        <p:menuitem value="Novo Usuário" actionListener="#{usuarioC.prepararAdicionarUsuario}" update=":form:infosUsuario" oncomplete="dialogGerUsuario.show()"  icon="ui-icon-document"/>                       
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar>                    
+                </h:form>
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="usuario" value="#{usuarioC.listarUsuarios}"> 
+                         <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Login"/>
+                            </f:facet>
+                            <h:outputText value="#{usuario.login}" />
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{usuarioC.excluirUsuario}" icon="ui-icon-close" ajax="true" onclick="confirmation.show()" />
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+                
+                <p:dialog header="Gerencia Usuário" widgetVar="dialogGerUsuario"  resizable="false" modal="false" showEffect="slide" width="500">
+                    <h:form prependId="false" id="form">
+                        <p:menubar>
+                            <p:menuitem  value="Salvar" update=":form1:tabela" oncomplete="dialogGerUsuario.hide();" actionListener="#{usuarioC.adicionarUsuario}" icon="ui-icon-disk" />
+                            <p:menuitem value="Alterar" update=":form1:tabela" oncomplete="dialogGerUsuario.hide();" actionListener="#{usuarioC.alterarUsuario}" icon="ui-icon-arrowrefresh-1-w"/>                    
+                        </p:menubar>  
+                        <h:panelGrid id="infosUsuario" columns="2" style="margin-bottom:10px">                            
+                            <h:outputLabel for="loginUsuario" value="Login" />
+                            <h:inputText id="loginUsuario" value="#{usuarioC.usuario.login}"/>                            
+                            <h:outputLabel for="senhaUsuario" value="Senha" />
+                            <h:inputText id="senhaUsuario" value="#{usuarioC.usuario.senha}"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </p:panel>
+        </ui:define>
+    </ui:composition>  
+</html>

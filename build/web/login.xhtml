@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+            .ui-widget,
+            .ui-widget .ui-widget {
+                font-size: 11px !important;
+            }
+        </style>
+        <title>Atendimento Médico</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top" class="top">
+            <h:form>
+                <p:outputPanel id="panel" autoUpdate="true">
+                    <p:graphicImage value="/images/logo.jpg" />
+                </p:outputPanel>
+            </h:form>
+        </div>
+
+        <div id="content" class="center_content">
+
+            <h:form>
+                <p:panel header="Login">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputText value="Usuário:" />
+                        <p:inputText id="Usuario" value="#{loginC.username}"/>
+                        <h:outputText value="Senha: " />
+                        <p:password id="Feedback" value="#{loginC.password}" feedback="false"/>
+                        <h:outputText value=""/>
+                        <h:commandButton value="Logar" id="logar" action="#{loginC.login}"/>
+                        <div id="bottom">
+                                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                        </div>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </div>
+    </h:body>
+</html>

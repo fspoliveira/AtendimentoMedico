@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/home.xhtml">
+        <ui:define name="atendimento">
+            <p:panel header="Atendimento de Pacientes" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+
+                <h:form prependId="false" id="menulateral">
+                    <p:menubar>
+                        <p:menuitem value="Novo Atendimento " actionListener="#{atendimentoC.prepararAdicionarAtendimento}" update=":form:infosAtendimento" oncomplete="dialogGerAtendimento.show()"  icon="ui-icon-document"/>                       
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar>  
+                </h:form>
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="atendimento" value="#{atendimentoC.listarAtendimentos}">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Número"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.id}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome do Médico"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.idMedico.nome}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Especialidade"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.idEspecialidade.especialidade}" />
+                        </p:column> 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tratamento"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.idTratamento.descricao}" />
+                        </p:column> 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Valor Trat."/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.idTratamento.valorTratamento}" >
+                                <f:convertNumber type="currency" currencySymbol='R$'/> 
+                            </h:outputText>
+                        </p:column> 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome do Paciente"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.idPaciente.nome}" />
+                        </p:column>
+                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Convênio"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.idConvenio.descricao}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Data"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.dataAtendimento}" id="popupDate">  
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>  
+                            </h:outputText> 
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Hora"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.horaAtendimento}" />
+                        </p:column> 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Prontuario"/>
+                            </f:facet>
+                            <h:outputText value="#{atendimento.prontuario}" />
+                        </p:column> 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Alterar"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{atendimentoC.prepararAlterarAtendimento}" icon="ui-icon-arrowrefresh-1-w" update=":form:infosAtendimento" oncomplete="dialogGerAtendimento.show()"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{atendimentoC.excluirAtendimento}" icon="ui-icon-close" ajax="true" onclick="confirmation.show()" />
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+
+                <p:dialog header="Gerencia Atendimento do Paciente" widgetVar="dialogGerAtendimento"  resizable="false" showEffect="slide" width="500">
+                    <h:form prependId="false" id="form">
+                        <p:menubar>
+                            <p:menuitem value="Salvar" update=":form1:tabela" oncomplete="dialogGerAtendimento.hide();" actionListener="#{atendimentoC.adicionarAtendimento}" icon="ui-icon-disk" />
+                            <p:menuitem value="Alterar" update=":form1:tabela" oncomplete="dialogGerAtendimento.hide();" actionListener="#{atendimentoC.alterarAtendimento}" icon="ui-icon-arrowrefresh-1-w"/>                    
+                        </p:menubar> 
+                        <h:panelGrid id="infosAtendimento" columns="2" style="margin-bottom:10px">
+                            <h:outputLabel value="Especialidade:" />
+                            <h:selectOneMenu id="esp" value="#{atendimentoC.especialidade.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione a Especialidade" itemValue="Nenhum" />
+                                <f:selectItems value="#{atendimentoC.especialidadesMedicoCmbBox}"  />  
+                                 <p:ajax update="trat" listener="#{atendimentoC.getTratPorConvEspCmbBox}"/>
+                            </h:selectOneMenu> 
+                            <h:outputLabel value="Paciente" />
+                            <h:selectOneMenu id="pac" value="#{atendimentoC.paciente.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o Paciente" itemValue="Nenhum" />
+                                <f:selectItems value="#{atendimentoC.pacientesCmbBox}" /> 
+                                <p:ajax update="trat" listener="#{atendimentoC.getTratPorConvEspCmbBox}"/>
+                            </h:selectOneMenu> 
+                            <h:outputLabel value="Tratamento" />
+                            <h:selectOneMenu id="trat" value="#{atendimentoC.tratamento.idTratamento}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o Tratamento" itemValue="Nenhum" />
+                                <f:selectItems value="#{atendimentoC.tratPorConvEspCmbBox}" />                                
+                            </h:selectOneMenu> 
+                            <h:outputLabel value="Data da consulta" />
+                            <p:calendar value="#{atendimentoC.atendimento.dataAtendimento}" id="popupCal" style="width: 200px;" /> 
+                            <h:outputLabel for="horaConsulta" value="Hora Consulta" />
+                            <h:inputText id="descConvenio" value="#{atendimentoC.atendimento.horaAtendimento}"/>
+                            <h:outputLabel for="prontuario" value="Prontuario" />
+                            <h:inputText id="prontuario" value="#{atendimentoC.atendimento.prontuario}"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </p:panel>
+        </ui:define>
+    </ui:composition>     
+</html>

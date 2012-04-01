@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/home.xhtml">
+        <ui:define name="paciente">
+            <p:panel header="Cadastro de Convênio" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+                <h:form prependId="false" id="menulateral">
+                    <p:menubar>
+                        <p:menuitem value="Novo Paciente" actionListener="#{pacienteC.prepararAdicionarPaciente}" update=":form:infosPaciente" oncomplete="dialogGerPaciente.show()" icon="ui-icon-document"/>                       
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar>  
+                </h:form>
+
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="paciente" value="#{pacienteC.listarPacientes}">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.nome}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Data de Nascimento" /> 
+                            </f:facet>
+                            <h:outputText value="#{paciente.dataNascimento}" id="popupDate">  
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>  
+                            </h:outputText> 
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="CPF"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.cpf}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="RG"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.rg}" />
+                        </p:column> 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cidade"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.cidade}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Estado"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.estado}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cor"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.cor}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Sexo"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.sexo}" />
+                        </p:column> 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Convênio"/>
+                            </f:facet>
+                            <h:outputText value="#{paciente.convenio.descricao}" />
+                        </p:column>                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Alterar"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{pacienteC.prepararAlterarPaciente}" icon="ui-icon-arrowrefresh-1-w" update=":form:infosPaciente" oncomplete="dialogGerPaciente.show()"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>                            
+                            <p:commandButton actionListener="#{pacienteC.excluirPaciente}" icon="ui-icon-close" ajax="true" onclick="confirmation.show()" />
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+
+                <p:dialog header="Gerencia Paciente" widgetVar="dialogGerPaciente" resizable="false" showEffect="slide" width="500">
+                    <h:form prependId="false" id="form">
+                        <p:menubar>
+                            <p:menuitem value="Salvar" update=":form1:tabela" oncomplete="dialogGerPaciente.hide();" actionListener="#{pacienteC.adicionarPaciente}" icon="ui-icon-disk" />
+                            <p:menuitem value="Alterar" update=":form1:tabela" oncomplete="dialogGerPaciente.hide();" actionListener="#{pacienteC.alterarPaciente}" icon="ui-icon-arrowrefresh-1-w"/>                    
+                        </p:menubar> 
+                        <h:panelGrid id="infosPaciente" columns="2" style="margin-bottom:10px">
+                            <h:outputLabel for="nomePaciente" value="Nome Paciente:" />
+                            <h:inputText id="nomePaciente" value="#{pacienteC.paciente.nome}"/>                    
+                            <h:outputText value="Data de Nascimento:" />  
+                            <p:calendar value="#{pacienteC.paciente.dataNascimento}" id="popupCal" />                      
+                            <h:outputLabel for="cpfPaciente" value="CPF:" />
+                            <h:inputText id="cpfPaciente" value="#{pacienteC.paciente.cpf}"/>
+                            <h:outputLabel for="rgPaciente" value="RG:" />
+                            <h:inputText id="rgPaciente" value="#{pacienteC.paciente.rg}"/>
+                            <h:outputLabel for="cidadePaciente" value="Cidade:" />
+                            <h:inputText id="cidadePaciente" value="#{pacienteC.paciente.cidade}"/>
+                            <h:outputLabel for="estadoPaciente" value="Estado:" />
+                            <h:inputText id="estadoPaciente" value="#{pacienteC.paciente.estado}"/>                    
+                            <h:outputLabel for="corPaciente" value="Cor:" />
+                            <h:inputText id="corPaciente" value="#{pacienteC.paciente.cor}"/>                    
+                            <h:outputLabel for="sexoPaciente" value="Sexo:" />
+                            <h:inputText id="sexoPaciente" value="#{pacienteC.paciente.sexo}"/> 
+                            <h:outputLabel value="Convenio:" />
+                            <h:selectOneMenu id="tipoConv" value="#{pacienteC.convenio.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o tipo" itemValue="Nenhum" />
+                                <f:selectItems value="#{pacienteC.tipos}" />
+                            </h:selectOneMenu> 
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog> 
+            </p:panel>
+        </ui:define>
+    </ui:composition> 
+</html>

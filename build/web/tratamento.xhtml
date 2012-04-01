@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/home.xhtml">
+        <ui:define name="convenio">
+            <p:panel header="Cadastro de Tratamentos" style="border: #ffffff" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="2000" widgetVar="panel" >
+                <h:form prependId="false" id="menulateral">
+                    <p:menubar>
+                        <p:menuitem value="Novo Tratamento" actionListener="#{tratamentoC.prepararAdicionarTratamento}" update=":form:infosTratamento" oncomplete="dialogGerTratamento.show()"  icon="ui-icon-document"/>                       
+                        <p:menuitem value="Sair" url="/home.jsf" icon="ui-icon-extlink"/>
+                    </p:menubar>                    
+                </h:form>   
+                <h:form prependId="false" id="form1">
+                    <p:dataTable id="tabela" var="tratamento" value="#{tratamentoC.listarTratamentos}">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Descrição do Tratamento"/>
+                            </f:facet>
+                            <h:outputText value="#{tratamento.descricao}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Descrição da Especialidade"/>
+                            </f:facet>
+                            <h:outputText value="#{tratamento.idEspecialidade.especialidade}" />
+                        </p:column>                         
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Convênio"/>
+                            </f:facet>
+                            <h:outputText value="#{tratamento.convenio.descricao}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Valor"/>
+                            </f:facet>
+                            <h:outputText value="#{tratamento.valorTratamento}">
+                                <f:convertNumber type="currency" currencySymbol='R$'/> 
+                            </h:outputText>
+
+                        </p:column>                         
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Alterar"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{tratamentoC.prepararAlterarTratamento}" icon="ui-icon-arrowrefresh-1-w" update=":form:infosTratamento" oncomplete="dialogGerTratamento.show()"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{tratamentoC.excluirTratamento}" icon="ui-icon-close" ajax="true" onclick="confirmation.show()" />
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+
+                <p:dialog header="Gerencia Tratamento" widgetVar="dialogGerTratamento"  resizable="false" showEffect="slide" width="500">
+                    <h:form prependId="false" id="form">                        
+                        <p:menubar>
+                            <p:menuitem  value="Salvar" update=":form1:tabela" oncomplete="dialogGerTratamento.hide();" actionListener="#{tratamentoC.adicionarTratamento}" icon="ui-icon-disk" />
+                            <p:menuitem value="Alterar" update=":form1:tabela" oncomplete="dialogGerTratamento.hide();" actionListener="#{tratamentoC.alterarTratamento}" icon="ui-icon-arrowrefresh-1-w"/>                    
+                        </p:menubar>  
+                        <h:panelGrid id="infosTratamento" columns="2" style="margin-bottom:10px">
+                            <h:outputLabel for="descTratamento" value="Tratamento:" />
+                            <h:inputText id="descTratamento" value="#{tratamentoC.tratamento.descricao}"/>                    
+                            <h:outputLabel value="Especialidade:" />
+                            <h:selectOneMenu id="tipoTrat" value="#{tratamentoC.especialidade.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o tipo" itemValue="Nenhum" />
+                                <f:selectItems value="#{tratamentoC.especialidadesCmbBox}" />
+                            </h:selectOneMenu>                    
+                            <h:outputLabel value="Convenio:" />
+                            <h:selectOneMenu id="tipoConv" value="#{tratamentoC.convenio.id}"
+                                             style="width: 200px;">
+                                <f:selectItem itemLabel="Selecione o tipo" itemValue="Nenhum" />
+                                <f:selectItems value="#{tratamentoC.conveniosCmbBox}" />
+                            </h:selectOneMenu>  
+                            <h:outputLabel for="valorTratamento" value="Valor:" />
+                            <h:inputText id="valorTratamento" value="#{tratamentoC.tratamento.valorTratamento}"/>                                 
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </p:panel>
+        </ui:define>
+    </ui:composition> 
+</html>

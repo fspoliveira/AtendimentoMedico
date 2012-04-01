@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="./resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <title>Atendimento Médico</title>
+        <style>
+            .ui-widget,
+            .ui-widget .ui-widget {
+                font-size: 11px !important;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="95" resizable="false" closable="false" collapsible="false">
+                <p:graphicImage value="/images/logo.jpg" />
+                <h:outputText value="Usuário: #{loginC.nomeUserLogado}" style="position: absolute;right: 5%;bottom: 5%" />
+            </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="45" header="Sobre" resizable="true" closable="true" collapsible="true">
+                <h:outputText value="MedicalSystem © 2012" />
+            </p:layoutUnit>
+
+            <p:layoutUnit  position="west" size="170"  resizable="true" closable="false" collapsible="true">
+                <h:form>
+                    <p:menu style="border: #ffffff">
+                        <p:submenu label="Cadastros">
+                            <p:menuitem value="Convênios" url="/convenio.jsf" ajax="true" icon="ui-icon-star"/>                            
+                            <p:menuitem value="Médicos" url="/medico.jsf" ajax="true" icon="ui-icon-star"/>                            
+                            <p:menuitem value="Especialidades" url="/especialidade.jsf" ajax="true" icon="ui-icon-star"/>
+                            <p:menuitem value="Espec. Médicos" url="/medicoespecialidade.jsf" ajax="true" icon="ui-icon-star"/>                            
+                            <p:menuitem value="Pacientes" url="/paciente.jsf" ajax="true" icon="ui-icon-star"/>
+                            <p:menuitem value="Tratamentos" url="/tratamento.jsf" ajax="true" icon="ui-icon-star"/> 
+                        </p:submenu>
+                        <p:submenu label="Atendimentos">                            
+                            <p:menuitem value="Agendamento" url="/agendamento.jsf" ajax="true" icon="ui-icon-star"/>
+                            <p:menuitem value="Atendimento" url="atendimento.jsf" ajax="true" icon="ui-icon-star"/>
+                            <p:menuitem value="Registro de Materiais" url="registro.jsf" ajax="true" icon="ui-icon-star"/>
+                            <p:menuitem value="Faturamento" url="faturamento.jsf" ajax="true" icon="ui-icon-star"/>
+                        </p:submenu>
+                        <p:submenu label="Produtos">
+                            <p:menuitem value="Tipo de Produto" url="/tipoProduto.jsf" ajax="true" icon="ui-icon-star"/>
+                            <p:menuitem value="Produtos" url="/produto.jsf" ajax="true" icon="ui-icon-star"/>
+                        </p:submenu>
+                         <p:submenu label="Administração">
+                              <p:menuitem id="Usuario" value="Usuário" url="/usuario.jsf" ajax="true" icon="ui-icon-star"/>
+                         </p:submenu>
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit> 
+            <p:layoutUnit position="center">
+                <ui:insert name="convenio" />
+                <ui:insert name="medico" />
+                <ui:insert name="especialidade" />
+                <ui:insert name="tipoProduto" />
+                <ui:insert name="paciente" />
+                <ui:insert name="agendamento"/>
+                <ui:insert name="usuario"/>
+                <ui:insert name="atendimento"/>
+                <ui:insert name="registro"/>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
